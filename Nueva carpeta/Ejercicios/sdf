@@ -1,1 +1,134 @@
+🟦 1. AGREGAR (siempre igual)
+✔ Ejemplo Material (Libro y Revista)
+public void agregarLibro(Libro l) {
+    libros.add(l);
+}
 
+public void agregarRevista(Revista r) {
+    revistas.add(r);
+}
+
+
+🧠 Estructura universal:
+
+public void agregar(Tipo obj) {
+    lista.add(obj);
+}
+
+
+👉 Da igual si es libros.add(l) o autos.add(a) o computadoras.add(c).
+
+🟩 2. BUSCAR (siempre igual)
+✔ Ejemplo Material (Libro y Revista)
+public Material buscar(String codigo) {
+    if (codigo == null) return null;
+
+    String codigoBuscado = codigo.toUpperCase();
+
+    for (Libro l : libros) {
+        if (l.getCodigo().equalsIgnoreCase(codigoBuscado))
+            return l;
+    }
+
+    for (Revista r : revistas) {
+        if (r.getCodigo().equalsIgnoreCase(codigoBuscado))
+            return r;
+    }
+
+    return null;
+}
+
+
+🧠 Estructura universal:
+
+public Tipo buscar(String clave) {
+    if (clave == null) return null;
+
+    for (Tipo t : lista) {
+        if (t.getClave().equalsIgnoreCase(clave)) return t;
+    }
+    return null;
+}
+
+🟥 3. ELIMINAR (siempre igual)
+✔ Ejemplo Material (Libro y Revista)
+public boolean eliminar(String codigo) {
+    Material encontrado = buscar(codigo);
+    if (encontrado == null) return false;
+
+    // Puede ser Libro o Revista
+    if (encontrado instanceof Libro) {
+        return libros.remove(encontrado);
+    } else if (encontrado instanceof Revista) {
+        return revistas.remove(encontrado);
+    }
+
+    return false;
+}
+
+
+🧠 Estructura universal:
+
+public boolean eliminar(String clave) {
+    Objeto o = buscar(clave);
+    if (o == null) return false;
+
+    return lista.remove(o);
+}
+
+
+👉 Siempre:
+
+buscar
+
+si existe → remove
+
+si no → false
+
+🟨 4. ACTUALIZAR (siempre igual)
+✔ Ejemplo Material (Libro y Revista)
+public boolean actualizarLibro(String codigoOriginal, Libro nuevo) {
+    String cod = codigoOriginal.toUpperCase();
+
+    for (int i = 0; i < libros.size(); i++) {
+        if (libros.get(i).getCodigo().equalsIgnoreCase(cod)) {
+            libros.set(i, nuevo);
+            return true;
+        }
+    }
+    return false;
+}
+
+public boolean actualizarRevista(String codigoOriginal, Revista nueva) {
+    String cod = codigoOriginal.toUpperCase();
+
+    for (int i = 0; i < revistas.size(); i++) {
+        if (revistas.get(i).getCodigo().equalsIgnoreCase(cod)) {
+            revistas.set(i, nueva);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+🧠 Estructura universal:
+
+public boolean actualizar(String claveOriginal, Tipo nuevo) {
+    for (int i = 0; i < lista.size(); i++) {
+        if (lista.get(i).getClave().equalsIgnoreCase(claveOriginal)) {
+            lista.set(i, nuevo);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+👉 Siempre:
+
+recorrer lista
+
+encontrar índice
+
+usar set(i, nuevo)
