@@ -86,6 +86,7 @@ abstract class Computadora {
   }
 }
 
+//Termina ejercicio comparacion igualdad
 // ==========================================================
 // Ventas.java (interface)
 // ==========================================================
@@ -123,7 +124,7 @@ public class PuertosInsuficientesException extends Exception {
     super("Error: una computadora de escritorio debe tener al menos 5 puertos disponibles.");
   }
 }
-
+//termina ejercicio parte 1
 // ==========================================================
 // Escritorio.java
 // ==========================================================
@@ -144,7 +145,7 @@ class Escritorio extends Computadora implements Ventas {
       throw new PuertosInsuficientesException(
           "Error: un Escritorio debe tener al menos 5 puertos. Valor recibido: " + cantidadPuertos);
     }
-
+   //termina ejercicio escritorio parte 2
     this.cantidadPuertos = cantidadPuertos;
   }
 
@@ -247,7 +248,7 @@ class Laptop extends Computadora implements Ventas {
     return super.toString();
   }
 }
-
+//termina ejercicio
 // ==========================================================
 // InventarioComputadoras.java
 // (Ejercicio tipo "Buscar elemento" + CRUD básico)
@@ -319,7 +320,7 @@ public class InventarioComputadoras {
     // Si no está en ninguna lista, retornar null
     return null;
   }
-
+  //termina ejercicio
   // ================== ELIMINAR ==================
 
   public boolean eliminarComputadora(String numeroSerie) {
@@ -619,3 +620,4 @@ public class Main {
     }
   }
 }
+
