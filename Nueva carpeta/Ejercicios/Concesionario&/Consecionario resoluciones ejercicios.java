@@ -74,7 +74,7 @@ abstract class Vehiculo {
   public int hashCode() {
     return (patente == null) ? 0 : patente.toUpperCase().hashCode();
   }
-
+  //termina ejercicio fijarse si el metodo abstraco de abajo se necesita.
   // Método abstracto para que cada vehículo devuelva su "icono" o tipo
   public abstract String verTipoDeVehiculo();
 }
@@ -122,7 +122,7 @@ public class PuertasInsuficientesException extends Exception {
     super("Error: un auto debe tener al menos 3 puertas.");
   }
 }
-
+//fin ejercicio excepcion en puertasinsuficientesexception
 // ==========================================================
 // Auto.java
 // ==========================================================
@@ -143,7 +143,7 @@ class Auto extends Vehiculo implements Ventas {
       throw new PuertasInsuficientesException(
           "Error: un auto debe tener al menos 3 puertas. Puertas recibidas: " + cantPuertas);
     }
-
+  //termina aca ejercicio excepcion oooo abajo
     this.cantPuertas = cantPuertas;
   }
 
@@ -154,7 +154,7 @@ class Auto extends Vehiculo implements Ventas {
   public void setCantPuertas(int cantPuertas) {
     this.cantPuertas = cantPuertas;
   }
-
+  //aca 
   // ====== EJERCICIO TIPO "Implementar la interface" ======
   @Override
   public double calcularPrecioVenta(double precioBase, int anioActual) {
@@ -179,7 +179,7 @@ class Auto extends Vehiculo implements Ventas {
 
     return precioFinal;
   }
-
+  //termina aca ejercicio de ventas auto o abajo
   @Override
   public String verTipoDeVehiculo() {
     return "🚗 AUTO";
@@ -191,7 +191,7 @@ class Auto extends Vehiculo implements Ventas {
         + kilometraje + "Km\t" + cantPuertas + " puertas";
   }
 }
-
+//o aca corroborar.
 
 // ==========================================================
 // Moto.java
@@ -226,7 +226,7 @@ class Moto extends Vehiculo implements Ventas {
 
     return precioFinal;
   }
-
+  //termina ejercicio motos ventas 
   @Override
   public String verTipoDeVehiculo() {
     return "🏍️ MOTO";
@@ -238,7 +238,7 @@ class Moto extends Vehiculo implements Ventas {
         + kilometraje + "Km";
   }
 }
-
+//o aca mirar bien
 
 // ==========================================================
 // Inventario.java
@@ -311,7 +311,7 @@ public class Inventario {
     // Si no está en ninguna, retornar null
     return null;
   }
-
+  //termina ejercicio
   // ================== ELIMINAR ==================
 
   public boolean eliminarVehiculo(String patente) {
@@ -607,3 +607,4 @@ public class Main {
     }
   }
 }
+
