@@ -283,3 +283,27 @@ public class Inventario {
 
 Tus errores en main estaban todos causados porque agregarAuto NO existía.
 Con la nueva versión funciona perfecto.
+
+EXCEPTION CODIGO
+package Parciales.Parcial2025.Segundo.Concesionario;
+
+/**
+ * Excepción personalizada que se lanza cuando se intenta crear
+ * un Auto con menos de 3 puertas.
+ *
+ * Es una excepción verificada (checked exception), por lo que
+ * debe ser manejada obligatoriamente con try/catch o throws.
+ */
+public class PuertasInsuficientesException extends Exception {
+
+    // Constructor por defecto: mensaje estándar
+    public PuertasInsuficientesException() {
+        super("Error: un auto debe tener al menos 3 puertas.");
+    }
+
+    // Constructor con mensaje personalizado
+    public PuertasInsuficientesException(String mensaje) {
+        super(mensaje);
+    }
+}
+
