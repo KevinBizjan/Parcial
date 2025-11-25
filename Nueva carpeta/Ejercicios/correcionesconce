@@ -307,3 +307,119 @@ public class PuertasInsuficientesException extends Exception {
     }
 }
 
+
+
+
+CONSINAS RESUELTOTEMAA
+✅ EJERCICIO 1 — Implementar la interface (Auto.calcularPrecioVenta)
+❌ Tu código actual NO cumple la consigna.
+
+Te pide:
+
+✔ Depreciación 5% por año de uso
+
+→ vos pusiste 10% por año.
+
+✔ Luego aplicar un porcentaje adicional según puertas:
+
+3 puertas → +30%
+
+4 puertas → +40%
+
+cualquier otra → +35%
+
+→ vos pusiste un descuento del 5% y nada de puertas.
+
+El método correcto ES ESTE:
+@Override
+public double calcularPrecioVenta(double precioBase, int anioActual) {
+    int aniosUso = anioActual - this.modelo;
+    if (aniosUso < 0) aniosUso = 0;
+
+    // 5% por año
+    double precioDepreciado = precioBase * (1 - (0.05 * aniosUso));
+
+    // Porcentaje adicional por puertas
+    double adicional;
+
+    if (cantPuertas == 3) adicional = 0.30;
+    else if (cantPuertas == 4) adicional = 0.40;
+    else adicional = 0.35;
+
+    return precioDepreciado * (1 + adicional);
+}
+
+
+👉 Pegá esto en Auto y listo.
+Ahora el ejercicio 1 queda PERFECTO.
+
+✅ EJERCICIO 2 — Excepciones
+✔ Tu excepción está correcta.
+
+Incluye:
+
+Constructor con mensaje personalizado → ✔
+
+Constructor por defecto → ✔
+
+Es checked exception (extends Exception) → ✔
+
+Se lanza en el constructor de Auto si puertas < 3 → ✔
+
+✔ NO hay que corregir nada.
+✅ EJERCICIO 3 — Igualdad (equals y hashCode)
+
+Tu implementación:
+
+✔ Compara SOLO por patente
+✔ Usa equalsIgnoreCase
+✔ Aplica checkeo de null
+✔ hashCode consistente con equals
+
+✔ Está PERFECTAMENTE hecho.
+❌ EJERCICIO 4 — agregarAuto(Auto auto)
+
+Tu código actual:
+
+public void agregarAuto(Auto auto) {
+    autos.add(auto);
+}
+
+❌ Esto NO cumple la consigna.
+
+La consigna pide:
+
+verificar si ya existe un auto con la misma patente
+
+si existe → return false
+
+si no existe → agregar y retornar true
+
+✔ El método correcto ES ESTE:
+public boolean agregarAuto(Auto auto) {
+
+    // validar patente repetida
+    for (Auto a : autos) {
+        if (a.getPatente().equalsIgnoreCase(auto.getPatente())) {
+            return false;
+        }
+    }
+
+    autos.add(auto);
+    return true;
+}
+
+
+👉 Y en Main cuando registres un auto, tenés que cambiar:
+
+inventario.agregarAuto(auto);
+System.out.println("Auto registrado correctamente.");
+
+
+por:
+
+if (inventario.agregarAuto(auto)) {
+    System.out.println("✔ Auto agregado correctamente.");
+} else {
+    System.out.println("✖ Ya existe un auto con esa patente.");
+}
