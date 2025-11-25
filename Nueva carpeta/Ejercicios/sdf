@@ -1,3 +1,20 @@
+ // ====== ESTRUCTURA UNIVERSAL EQUALS/HASHCODE ======
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Material otro = (Material) obj;
+
+        return this.codigo.equalsIgnoreCase(otro.codigo);
+    }
+
+    @Override
+    public int hashCode() {
+        return codigo.toUpperCase().hashCode();
+    }
+}
+
 🟦 1. AGREGAR (siempre igual)
 ✔ Ejemplo Material (Libro y Revista)
 public void agregarLibro(Libro l) {
@@ -132,3 +149,153 @@ recorrer lista
 encontrar índice
 
 usar set(i, nuevo)
+
+🟩 2. ESTRUCTURA PARA SUBCLASE (Ejemplo: Libro)
+class Libro extends Material {
+
+    private String autor;
+    private int numeroPaginas;
+
+    public Libro(String codigo, String titulo, int anioPublicacion,
+                 String autor, int numeroPaginas) {
+        super(codigo, titulo, anioPublicacion);
+        this.autor = autor;
+        this.numeroPaginas = numeroPaginas;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public int getNumeroPaginas() {
+        return numeroPaginas;
+    }
+
+    @Override
+    public String getTipo() {
+        return "LIBRO";
+    }
+}
+
+🟥 3. ESTRUCTURA PARA SUBCLASE CON EXCEPCIÓN (Ejemplo: Revista)
+
+Primero: la excepción
+
+public class EdicionInvalidaException extends Exception {
+
+    public EdicionInvalidaException() {
+        super("Error: el número de edición debe ser al menos 1.");
+    }
+
+    public EdicionInvalidaException(String msg) {
+        super(msg);
+    }
+}
+
+
+Ahora la clase Revista:
+
+class Revista extends Material {
+
+    private String editorial;
+    private int numeroEdicion;
+
+    public Revista(String codigo, String titulo, int anioPublicacion,
+                   String editorial, int numeroEdicion)
+                   throws EdicionInvalidaException {
+        super(codigo, titulo, anioPublicacion);
+
+        if (numeroEdicion < 1) {
+            throw new EdicionInvalidaException();
+        }
+
+        this.editorial = editorial;
+        this.numeroEdicion = numeroEdicion;
+    }
+
+    public String getEditorial() {
+        return editorial;
+    }
+
+    public int getNumeroEdicion() {
+        return numeroEdicion;
+    }
+
+    @Override
+    public String getTipo() {
+        return "REVISTA";
+    }
+}
+
+🟨 4. ESTRUCTURA INVENTARIO (CRUD COMPLETO)
+public class Inventario {
+
+    private ArrayList<Libro> libros;
+    private ArrayList<Revista> revistas;
+
+    public Inventario() {
+        libros = new ArrayList<>();
+        revistas = new ArrayList<>();
+    }
+
+    // ---------- AGREGAR ----------
+    public void agregarLibro(Libro l) {
+        libros.add(l);
+    }
+
+    public void agregarRevista(Revista r) {
+        revistas.add(r);
+    }
+
+    // ---------- BUSCAR ----------
+    public Material buscarMaterial(String codigo) {
+        if (codigo == null) return null;
+
+        String buscada = codigo.toUpperCase();
+
+        for (Libro l : libros) {
+            if (l.getCodigo().equalsIgnoreCase(buscada)) return l;
+        }
+        for (Revista r : revistas) {
+            if (r.getCodigo().equalsIgnoreCase(buscada)) return r;
+        }
+
+        return null;
+    }
+
+    // ---------- ELIMINAR ----------
+    public boolean eliminarMaterial(String codigo) {
+        Material m = buscarMaterial(codigo);
+        if (m == null) return false;
+
+        if (m instanceof Libro) return libros.remove(m);
+        if (m instanceof Revista) return revistas.remove(m);
+
+        return false;
+    }
+
+    // ---------- ACTUALIZAR ----------
+    public boolean actualizarLibro(String codigoOriginal, Libro nuevo) {
+        String cod = codigoOriginal.toUpperCase();
+
+        for (int i = 0; i < libros.size(); i++) {
+            if (libros.get(i).getCodigo().equalsIgnoreCase(cod)) {
+                libros.set(i, nuevo);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean actualizarRevista(String codigoOriginal, Revista nueva) {
+        String cod = codigoOriginal.toUpperCase();
+
+        for (int i = 0; i < revistas.size(); i++) {
+            if (revistas.get(i).getCodigo().equalsIgnoreCase(cod)) {
+                revistas.set(i, nueva);
+                return true;
+            }
+        }
+        return false;
+    }
+}
