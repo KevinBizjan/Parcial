@@ -1,0 +1,143 @@
+1) Lectura y escritura de archivos
+✔ ¿Qué clase abre un archivo de texto en modo lectura?
+
+→ FileReader
+
+✔ ¿Qué clase abre un archivo de texto en modo escritura?
+
+→ FileWriter
+
+✔ ¿Qué clase transforma bytes en caracteres?
+
+→ InputStreamReader
+
+✔ ¿Qué clase transforma caracteres en bytes?
+
+→ OutputStreamWriter
+
+2) Métodos de BufferedWriter
+✔ write(int c)
+
+→ Escribe un carácter.
+
+✔ newLine()
+
+→ Escribe un salto de línea.
+
+✔ flush()
+
+→ Vuelca el contenido del buffer al archivo.
+
+✔ close()
+
+→ Cierra el archivo (haciendo flush automático).
+
+3) Colecciones – Set, List, Map
+✔ Set
+
+No permite duplicados (máx 1 vez).
+
+No mantiene orden.
+→ Respuesta correcta: “almacena cada elemento una sola vez como máximo y NO mantiene orden”.
+
+✔ Map
+
+Estructura de clave–valor.
+→ Correcto: java.util.Map.
+
+✔ Iteradores
+
+Cualquier colección que implemente Iterable, no solo List.
+
+Se usa hasNext() + next().
+
+For-each usa internamente un iterador.
+
+4) Excepciones en Java
+✔ Jerarquía
+
+Throwable
+
+Exception (checked)
+
+Error (no se debería capturar)
+
+✔ Checked vs Unchecked
+
+Subclases de RuntimeException → unchecked
+
+Subclases de Exception (except Runtime) → checked
+
+✔ Afirmación correcta del examen
+
+→ Error y Exception son subclases directas de Throwable.
+
+✔ Si un método llama a otro que lanza una checked exception
+
+Debe:
+
+declarar throws, o
+
+usar try/catch.
+
+✔ Definición correcta del método:
+void m() throws IOException {}
+
+✔ Para que compile un método que llama a otro que lanza checked exception:
+
+→ usar throws Exception (la respuesta correcta del examen).
+
+5) equals(), hashCode() y colecciones
+✔ equals() por defecto compara referencias.
+✔ HashSet usa:
+
+primero hashCode(),
+
+luego equals()
+para evitar duplicados.
+
+✔ Si dos objetos tienen mismo contenido y equals está sobreescrito → HashSet los guarda una sola vez.
+6) Serialización
+✔ Para serializar:
+
+La clase debe implementar Serializable.
+
+Todos los campos deben ser serializables.
+
+Si no, se lanza NotSerializableException.
+
+✔ Las subclases de una clase que implementa Serializable también son serializables.
+✔ Afirmación INCORRECTA del examen:
+
+→ “No todas las subclases de Person podrían ser serializables.”
+(Esa es falsa, porque sí lo son).
+
+7) Clase File
+✔ File
+
+→ Representa rutas, archivos y directorios.
+(No lee ni escribe).
+
+8) Respuestas correctas de los ejercicios de código
+✔ Comparación de objetos Noodle / AsianNoodle / Soba
+
+Resultado:
+
+false false | true false | true false
+
+✔ Try / catch / finally (el de “3,4”)
+
+Resultado:
+
+3,4
+
+✔ Try/catch anidado (el de “phew”)
+
+→ Imprime:
+
+phew
+
+✔ HashSet con JAVA, 5, true
+
+→ Muestra:
+JAVA, 5, true en orden indeterminado.
