@@ -1,0 +1,283 @@
+🟩 Conclusión: LO QUE MÁS TE PUEDEN TOMAR
+Tema	Probabilidad
+Implementar buscarComputadora	⭐⭐⭐⭐⭐ ALTÍSIMO
+Implementar calcularPrecioVenta en Laptop	⭐⭐⭐⭐⭐ ALTÍSIMO
+Implementar equals/hashCode en Computadora	⭐⭐⭐⭐
+Corregir setters a mayúsculas	⭐⭐⭐⭐
+Corregir toString	⭐⭐⭐
+Manejo de excepciones	⭐⭐⭐
+✅ 2) CÓDIGO CORREGIDO Y LISTO PARA COPIAR
+
+(versión ideal para estudiar o entregar en el parcial)
+
+📌 Computadora.java CORREGIDA
+package Parciales.Parcial2025.Segundo.Tecnologia;
+
+abstract class Computadora {
+
+    protected String marca;
+    protected int modelo;
+    protected String numeroSerie;
+    protected int horasUso;
+
+    public Computadora(String marca, int modelo, String numeroSerie, int horasUso) {
+        this.marca = marca.toUpperCase();
+        this.modelo = modelo;
+        this.numeroSerie = numeroSerie.toUpperCase();
+        this.horasUso = horasUso;
+    }
+
+    // Getters
+    public String getMarca() { return marca; }
+    public int getModelo() { return modelo; }
+    public String getNumeroSerie() { return numeroSerie; }
+    public int getHorasUso() { return horasUso; }
+
+    // Setters CONSISTENTES
+    public void setMarca(String marca) { this.marca = marca.toUpperCase(); }
+    public void setModelo(int modelo) { this.modelo = modelo; }
+    public void setNumeroSerie(String numeroSerie) { this.numeroSerie = numeroSerie.toUpperCase(); }
+    public void setHorasUso(int horasUso) { this.horasUso = horasUso; }
+
+    public abstract String verTipoDeComputadora();
+
+    @Override
+    public String toString() {
+        return marca + "\t" + modelo + "\t" + numeroSerie + "\t" + horasUso + "hs";
+    }
+
+    // ======= IGUALDAD POR NUMERO DE SERIE =======
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Computadora otra = (Computadora) obj;
+
+        return this.numeroSerie.equalsIgnoreCase(otra.numeroSerie);
+    }
+
+    @Override
+    public int hashCode() {
+        return numeroSerie.toUpperCase().hashCode();
+    }
+}
+
+🖥️ Escritorio.java CORREGIDO
+package Parciales.Parcial2025.Segundo.Tecnologia;
+
+class Escritorio extends Computadora implements Ventas {
+
+    private int cantidadPuertos;
+
+    public Escritorio(String marca, int modelo, String numeroSerie,
+                      int horasUso, int cantidadPuertos)
+            throws PuertosInsuficientesException {
+
+        super(marca, modelo, numeroSerie, horasUso);
+
+        if (cantidadPuertos < 5) {
+            throw new PuertosInsuficientesException(
+                "Error: Un escritorio debe tener al menos 5 puertos.");
+        }
+
+        this.cantidadPuertos = cantidadPuertos;
+    }
+
+    public int getCantidadPuertos() { return cantidadPuertos; }
+
+    public void setCantidadPuertos(int cantidadPuertos)
+            throws PuertosInsuficientesException {
+
+        if (cantidadPuertos < 5) {
+            throw new PuertosInsuficientesException(
+                "Error: Un escritorio debe tener al menos 5 puertos.");
+        }
+        this.cantidadPuertos = cantidadPuertos;
+    }
+
+    @Override
+    public String verTipoDeComputadora() {
+        return "ESCRITORIO";
+    }
+
+    @Override
+    public double calcularPrecioVenta(double precioBase, int anioActual) {
+        int anios = anioActual - modelo;
+        if (anios < 0) anios = 0;
+
+        double depreciacion = anios * 0.06;
+        if (depreciacion > 0.90) depreciacion = 0.90;
+
+        double base = precioBase * (1 - depreciacion);
+
+        double porcentaje = (cantidadPuertos <= 4) ? 0.10
+                          : (cantidadPuertos <= 8) ? 0.25 : 0.40;
+
+        return base * (1 + porcentaje);
+    }
+
+    @Override
+    public String toString() {
+        return verTipoDeComputadora() + "\t" + super.toString() +
+               "\t" + cantidadPuertos + " puertos";
+    }
+}
+
+💻 Laptop.java CORREGIDO
+package Parciales.Parcial2025.Segundo.Tecnologia;
+
+class Laptop extends Computadora implements Ventas {
+
+    public Laptop(String marca, int modelo, String numeroSerie, int horasUso) {
+        super(marca, modelo, numeroSerie, horasUso);
+    }
+
+    @Override
+    public String verTipoDeComputadora() {
+        return "LAPTOP";
+    }
+
+    @Override
+    public double calcularPrecioVenta(double precioBase, int anioActual) {
+        int anios = anioActual - modelo;
+        if (anios < 0) anios = 0;
+
+        double depreciacion = anios * 0.12;
+        if (depreciacion > 0.90) depreciacion = 0.90;
+
+        double base = precioBase * (1 - depreciacion);
+
+        return base * 0.85; // 15% descuento extra
+    }
+
+    @Override
+    public String toString() {
+        return verTipoDeComputadora() + "\t" + super.toString();
+    }
+}
+
+📦 InventarioComputadoras.java CORREGIDO
+package Parciales.Parcial2025.Segundo.Tecnologia;
+
+import java.util.ArrayList;
+
+public class InventarioComputadoras {
+
+    private ArrayList<Escritorio> escritorios;
+    private ArrayList<Laptop> laptops;
+
+    public InventarioComputadoras() {
+        escritorios = new ArrayList<>();
+        laptops = new ArrayList<>();
+    }
+
+    // ---- ALTAS ----
+    public boolean agregarEscritorio(Escritorio e) {
+        if (!existeComputadora(e.getNumeroSerie())) {
+            escritorios.add(e);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean agregarLaptop(Laptop l) {
+        if (!existeComputadora(l.getNumeroSerie())) {
+            laptops.add(l);
+            return true;
+        }
+        return false;
+    }
+
+    // ---- BUSCAR (EJERCICIO DEL PARCIAL) ----
+    public Computadora buscarComputadora(String numeroSerie) {
+        if (numeroSerie == null) return null;
+
+        String buscada = numeroSerie.toUpperCase();
+
+        for (Escritorio e : escritorios)
+            if (e.getNumeroSerie().equalsIgnoreCase(buscada)) return e;
+
+        for (Laptop l : laptops)
+            if (l.getNumeroSerie().equalsIgnoreCase(buscada)) return l;
+
+        return null;
+    }
+
+    // ---- ELIMINAR ----
+    public boolean eliminarComputadora(String numeroSerie) {
+        Computadora c = buscarComputadora(numeroSerie);
+        if (c == null) return false;
+
+        if (c instanceof Escritorio) return escritorios.remove(c);
+        if (c instanceof Laptop) return laptops.remove(c);
+
+        return false;
+    }
+
+    // ---- ACTUALIZAR ----
+    public boolean actualizarEscritorio(String serie, Escritorio nuevo) {
+        serie = serie.toUpperCase();
+        for (int i = 0; i < escritorios.size(); i++) {
+            if (escritorios.get(i).getNumeroSerie().equalsIgnoreCase(serie)) {
+                escritorios.set(i, nuevo);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean actualizarLaptop(String serie, Laptop nuevo) {
+        serie = serie.toUpperCase();
+        for (int i = 0; i < laptops.size(); i++) {
+            if (laptops.get(i).getNumeroSerie().equalsIgnoreCase(serie)) {
+                laptops.set(i, nuevo);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ---- CONTAR ----
+    public int getCantidadDeComputadoras() {
+        return escritorios.size() + laptops.size();
+    }
+
+    // ---- EXISTS ----
+    public boolean existeComputadora(String serie) {
+        return buscarComputadora(serie) != null;
+    }
+
+    // ---- LISTAR ----
+    public void listarTodasLasComputadoras() {
+        System.out.println("=== INVENTARIO ===");
+
+        System.out.println("\nESCRITORIOS:");
+        escritorios.forEach(System.out::println);
+
+        System.out.println("\nLAPTOPS:");
+        laptops.forEach(System.out::println);
+
+        System.out.println("\nTOTAL: " + getCantidadDeComputadoras());
+    }
+}
+
+PARTE DE PACKAGE
+package Parciales.Parcial2025.Segundo.Tecnologia;
+
+/**
+ * Excepción verificada que se lanza cuando un Escritorio
+ * intenta crearse con menos de 5 puertos disponibles.
+ */
+public class PuertosInsuficientesException extends Exception {
+
+    // Constructor por defecto
+    public PuertosInsuficientesException() {
+        super("Error: un escritorio debe tener al menos 5 puertos.");
+    }
+
+    // Constructor con mensaje personalizado
+    public PuertosInsuficientesException(String mensaje) {
+        super(mensaje);
+    }
+}
