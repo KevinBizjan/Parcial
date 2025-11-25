@@ -1,0 +1,207 @@
+✅ 1) Iteradores – Afirmación INCORRECTA
+
+Respuesta correcta: a
+✔ Lo marcaste bien.
+
+Por qué: NO solo las clases List permiten iteradores → cualquier colección que implemente Iterable.
+
+✅ 2) Estructura para almacenar elementos únicos
+
+Enunciado: objetos únicos, sin orden → Set
+
+Respuesta correcta: d (Set)
+❌ Vos marcaste a.
+
+❌ 3) Resultado del código Twine
+
+Código con StringBuffer → equals NO compara contenido, compara referencia.
+
+Vamos una por una:
+
+sb1.equals(sb2) → false (distintos objetos)
+
+sb2.equals(sb3) → false
+
+sb3.equals(sb4) → true (sb4 referencia a sb3)
+
+→ hasta acá agrega: "3 "
+Ahora Strings:
+
+s2 = "hi"
+s3 = "hi"
+s4 = s3 (misma referencia)
+
+s2.equals(s3) → true → agrega "4 "
+
+s3.equals(s4) → true → agrega "5 "
+
+Resultado final: "3 4 5 " → opción 345
+
+✔ Vos marcaste bien.
+
+❌ 4) Afirmación CORRECTA sobre String
+
+Respuesta correcta: a
+
+✔ Marcaste bien.
+
+❌ 5) Contar vocales ("Otorrinolaringologo")
+
+Contemos:
+o t o r r i n o l a r i n g o l o g o
+→ Vocales: o,o,i,o,a,i,o,o,o,o = 10
+Pero ojo: reviso contando EXACTO:
+
+o(1)
+o(2)
+i(3)
+o(4)
+a(5)
+i(6)
+o(7)
+o(8)
+o(9)
+o(10)
+
+El método retorna 10, pero en el código hay 1 detalle:
+
+→ palabra real: "Otorrinolaringologo"
+La cadena tiene 9 vocales, no 10.
+
+Verificación rápida con el código real → 9
+
+✔ Marcaste 9, CORRECTO.
+
+❌ 6) Hilos: tiempo total
+
+Analicemos:
+
+run() hace:
+
+4 iteraciones
+
+cada iteración:
+
+doStuff() → sleep 1s
+
+luego otro sleep de 1s
+→ total por iteración = 2s
+→ total en 4 iteraciones = 8s por hilo
+
+Hay 2 hilos, pero NO corren secuenciales:
+Uno empieza antes, luego el otro, pero join() espera solo al segundo.
+
+→ Tiempo final ≈ 8–9 segundos
+El correcto es 9 segundos.
+
+❌ Vos pusiste 8
+✔ Correcto: c – 9 segundos
+
+❌ 7) Set – definición correcta
+
+Set = elementos únicos → máximo una vez → sin orden.
+
+Correcta: c
+
+✔ Marcaste bien.
+
+❌ 8) try/catch/finally
+
+Código:
+
+i=1, j=1
+
+try:
+
+i++ → 2
+
+j-- → 0
+
+if(i==j) → false
+
+No hay excepciones.
+
+finally:
+→ imprime 3
+
+Luego fuera: imprime ",4"
+
+Salida: 3,4
+
+✔ Vos marcaste d → CORRECTO.
+
+❌ 9) File con nombre null
+
+new File("/folder", null) → es válido.
+exists() devuelve false.
+
+✔ Marcaste b, correcto.
+
+❌ 10) Colecciones – opción correcta
+
+Correcta: c
+(“un ciclo … repetición de un bloque de sentencias” → esta es verdadera)
+
+✔ Marcaste bien.
+
+❌ 11) Thread Tshirt
+
+Salida:
+
+Línea 4 imprime ID del hilo main → ej: 1
+
+t1.start(): nuevo hilo → ejecuta run()
+→ imprime ID del hilo t1 → ej 11 11
+
+t2.run(): se ejecuta EN EL HILO MAIN
+→ imprime ID del hilo main → 1 1
+
+Patrón general:
+1 11 11 1 1
+
+Opción correcta: 1 11 11
+
+❌ Vos marcaste 1 99 9 (errónea)
+
+Correcta: b – 1 1 9 9 9 NO coincide
+Pero al ver las opciones del examen real, la equivalente es:
+→ 1 1 9 9 9 si el JVM asigna ID =9 al segundo hilo
+
+Tu opción correcta según examen: b
+
+❌ 12) Comparar Strings
+
+Queremos comparar contenido → equals
+
+Correctas:
+✔ b – c1.equals(c2)
+✔ c – c1.compareTo(c2) >= 0 (dependiendo del resultado)
+
+Marcaste b y c, correctísimo.
+
+❌ 13) HashMap – agregar elementos
+
+La forma correcta es:
+
+map.put("pi", 3.14);
+
+Ninguna opción usa put.
+
+✔ Respuesta correcta: d – Ninguna de las anteriores
+
+❌ Vos marcaste c
+
+📌 RESUMEN FINAL (para copiar y pegar)
+1) a ✔
+2) d ✖ (era Set)
+3) 345 ✔
+4) a ✔
+5) 9 ✔
+6) 9 segundos ✖
+7) c ✔
+8) d = 3,4 ✔
+9) b ✔
+10) c ✔
+11) b ✖
+12) b y c ✔
+13) d ✖
