@@ -1,0 +1,326 @@
+🚹 MODELO DE PARCIAL – PERSONAS
+Tema: Gestión de Personas en un Registro Civil
+🧱 1. Clase abstracta Persona (igual que Vehiculo / Computadora)
+package Parciales.Parcial2025.Segundo.Personas;
+
+public abstract class Persona {
+    protected String nombre;
+    protected String apellido;
+    protected String dni;
+
+    public Persona(String nombre, String apellido, String dni) {
+        this.nombre = nombre.toUpperCase();
+        this.apellido = apellido.toUpperCase();
+        this.dni = dni;
+    }
+
+    public String getNombre() { return nombre; }
+    public String getApellido() { return apellido; }
+    public String getDni() { return dni; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Persona otra = (Persona) obj;
+        return this.dni.equalsIgnoreCase(otra.dni);
+    }
+
+    @Override
+    public int hashCode() {
+        return dni.toUpperCase().hashCode();
+    }
+
+    public abstract String verTipoPersona();
+}
+
+🎓 2. Interface – Registrable
+
+(Es igual que Ventas / Tecnologia)
+
+package Parciales.Parcial2025.Segundo.Personas;
+
+public interface Registrable {
+    String obtenerCredencial();
+}
+
+⚠️ 3. Excepción – EdadInvalidaException
+
+(Similar a PuertasInsuficientesException)
+
+package Parciales.Parcial2025.Segundo.Personas;
+
+public class EdadInvalidaException extends Exception {
+
+    public EdadInvalidaException(String mensaje) {
+        super(mensaje);
+    }
+
+    public EdadInvalidaException() {
+        super("Error: la edad no puede ser menor de 0 ni mayor de 120.");
+    }
+}
+
+🧑‍🏫 4. Clase Alumno
+
+(Implementa Registrable y valida edad)
+
+package Parciales.Parcial2025.Segundo.Personas;
+
+public class Alumno extends Persona implements Registrable {
+
+    private int edad;
+
+    public Alumno(String nombre, String apellido, String dni, int edad)
+            throws EdadInvalidaException {
+
+        super(nombre, apellido, dni);
+
+        if (edad < 0 || edad > 120) {
+            throw new EdadInvalidaException("Edad inválida: " + edad);
+        }
+
+        this.edad = edad;
+    }
+
+    public int getEdad() { return edad; }
+
+    @Override
+    public String obtenerCredencial() {
+        return "Alumno - DNI: " + dni;
+    }
+
+    @Override
+    public String verTipoPersona() {
+        return "👨‍🎓 ALUMNO";
+    }
+
+    @Override
+    public String toString() {
+        return verTipoPersona() + " | " + nombre + " " + apellido + " | DNI: " + dni + " | Edad: " + edad;
+    }
+}
+
+👨‍🏫 5. Clase Profesor
+package Parciales.Parcial2025.Segundo.Personas;
+
+public class Profesor extends Persona implements Registrable {
+
+    private String materia;
+
+    public Profesor(String nombre, String apellido, String dni, String materia) {
+        super(nombre, apellido, dni);
+        this.materia = materia.toUpperCase();
+    }
+
+    @Override
+    public String obtenerCredencial() {
+        return "Profesor de " + materia + " - DNI: " + dni;
+    }
+
+    @Override
+    public String verTipoPersona() {
+        return "👨‍🏫 PROFESOR";
+    }
+
+    @Override
+    public String toString() {
+        return verTipoPersona() + " | " + nombre + " " + apellido + " | DNI: "
+                + dni + " | Materia: " + materia;
+    }
+}
+
+📚 6. InventarioPersonas
+
+(Igual que InventarioConcesionaria)
+
+Incluye:
+
+agregarAlumno (con validación de DNI repetido)
+
+agregarProfesor (con validación de DNI repetido)
+
+buscarPersona por DNI
+
+eliminar
+
+actualizar
+
+listar
+
+package Parciales.Parcial2025.Segundo.Personas;
+
+import java.util.ArrayList;
+
+public class InventarioPersonas {
+
+    private ArrayList<Alumno> alumnos;
+    private ArrayList<Profesor> profesores;
+
+    public InventarioPersonas() {
+        this.alumnos = new ArrayList<>();
+        this.profesores = new ArrayList<>();
+    }
+
+    // ================== AGREGAR ==================
+
+    public boolean agregarAlumno(Alumno alumno) {
+        for (Alumno a : alumnos) {
+            if (a.getDni().equalsIgnoreCase(alumno.getDni())) {
+                return false;
+            }
+        }
+        alumnos.add(alumno);
+        return true;
+    }
+
+    public boolean agregarProfesor(Profesor profesor) {
+        for (Profesor p : profesores) {
+            if (p.getDni().equalsIgnoreCase(profesor.getDni())) {
+                return false;
+            }
+        }
+        profesores.add(profesor);
+        return true;
+    }
+
+    // ================== BUSCAR ==================
+
+    public Persona buscarPersona(String dni) {
+
+        for (Alumno a : alumnos) {
+            if (a.getDni().equalsIgnoreCase(dni)) return a;
+        }
+        for (Profesor p : profesores) {
+            if (p.getDni().equalsIgnoreCase(dni)) return p;
+        }
+        return null;
+    }
+
+    // ================== LISTAR ==================
+
+    public void listarPersonas() {
+        System.out.println("ALUMNOS:");
+        alumnos.forEach(System.out::println);
+
+        System.out.println("\nPROFESORES:");
+        profesores.forEach(System.out::println);
+
+        System.out.println("\nTotal personas: " + (alumnos.size() + profesores.size()));
+    }
+
+    // ================== ELIMINAR ==================
+
+    public boolean eliminarPersona(String dni) {
+        Persona encontrada = buscarPersona(dni);
+
+        if (encontrada instanceof Alumno) {
+            return alumnos.remove(encontrada);
+        } else if (encontrada instanceof Profesor) {
+            return profesores.remove(encontrada);
+        }
+        return false;
+    }
+}
+
+🖥️ 7. Main
+
+(Como Concesionaria y Tecnología)
+
+package Parciales.Parcial2025.Segundo.Personas;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        InventarioPersonas inventario = new InventarioPersonas();
+        Scanner sc = new Scanner(System.in);
+
+        int opcion;
+
+        do {
+            System.out.println("\n==== REGISTRO DE PERSONAS ====");
+            System.out.println("1. Agregar alumno");
+            System.out.println("2. Agregar profesor");
+            System.out.println("3. Buscar persona");
+            System.out.println("4. Listar personas");
+            System.out.println("5. Eliminar persona");
+            System.out.println("0. Salir");
+            System.out.print("Opción: ");
+
+            opcion = Integer.parseInt(sc.nextLine());
+
+            switch (opcion) {
+
+                case 1:
+                    try {
+                        System.out.print("Nombre: ");
+                        String nom = sc.nextLine();
+
+                        System.out.print("Apellido: ");
+                        String ape = sc.nextLine();
+
+                        System.out.print("DNI: ");
+                        String dni = sc.nextLine();
+
+                        System.out.print("Edad: ");
+                        int edad = Integer.parseInt(sc.nextLine());
+
+                        Alumno a = new Alumno(nom, ape, dni, edad);
+
+                        if (inventario.agregarAlumno(a))
+                            System.out.println("Alumno agregado.");
+                        else
+                            System.out.println("Ya existe un alumno con ese DNI.");
+
+                    } catch (EdadInvalidaException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Nombre: ");
+                    String nom = sc.nextLine();
+
+                    System.out.print("Apellido: ");
+                    String ape = sc.nextLine();
+
+                    System.out.print("DNI: ");
+                    String dni = sc.nextLine();
+
+                    System.out.print("Materia: ");
+                    String mat = sc.nextLine();
+
+                    Profesor p = new Profesor(nom, ape, dni, mat);
+
+                    if (inventario.agregarProfesor(p))
+                        System.out.println("Profesor agregado.");
+                    else
+                        System.out.println("Ya existe un profesor con ese DNI.");
+                    break;
+
+                case 3:
+                    System.out.print("DNI a buscar: ");
+                    Persona persona = inventario.buscarPersona(sc.nextLine());
+                    System.out.println((persona != null) ? persona : "No encontrado.");
+                    break;
+
+                case 4:
+                    inventario.listarPersonas();
+                    break;
+
+                case 5:
+                    System.out.print("DNI a eliminar: ");
+                    if (inventario.eliminarPersona(sc.nextLine()))
+                        System.out.println("Eliminado.");
+                    else
+                        System.out.println("No encontrado.");
+                    break;
+            }
+
+        } while (opcion != 0);
+    }
+}
