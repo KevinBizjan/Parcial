@@ -360,3 +360,171 @@ abstract class Aparato {
         return codigoInterno.toUpperCase().hashCode();
     }
 }
+
+🟦 MAQUINA CARDIO
+
+Hereda de Aparato e implementa Vendible.
+
+✔ Atributo adicional:
+
+nivelImpacto (1, 2 o 3)
+
+✔ Reglas del precio:
+
+10% de depreciación por año
+
+Tope del 80%
+
+Si nivelImpacto == 3 ⇒ descuento extra 5%
+
+✔ CÓDIGO COMPLETO DE MAQUINACARDIO
+public class MaquinaCardio extends Aparato implements Vendible {
+
+    private int nivelImpacto;
+
+    public MaquinaCardio(String codigoInterno, String nombre, int anioCompra,
+                         int horasUso, int nivelImpacto) {
+        super(codigoInterno, nombre, anioCompra, horasUso);
+        this.nivelImpacto = nivelImpacto;
+    }
+
+    public int getNivelImpacto() {
+        return nivelImpacto;
+    }
+
+    @Override
+    public String verTipoDeAparato() {
+        return "CARDIO";
+    }
+
+    @Override
+    public double calcularPrecioVenta(double precioBase, int anioActual) {
+        int aniosDeUso = anioActual - this.anioCompra;
+        if (aniosDeUso < 0) aniosDeUso = 0;
+
+        double depreciacion = aniosDeUso * 0.10;  // 10% por año
+        if (depreciacion > 0.80) depreciacion = 0.80; // tope del 80%
+
+        double precioDepreciado = precioBase * (1 - depreciacion);
+
+        // Descuento extra si tiene alto impacto
+        if (nivelImpacto == 3) {
+            precioDepreciado *= 0.95; // 5% de descuento
+        }
+
+        return precioDepreciado;
+    }
+}
+
+🟩 MAQUINA MUSCULACIÓN (sin excepción por ahora)
+✔ Atributo adicional:
+
+cantidadEstaciones
+
+✔ Reglas del precio:
+
+8% depreciación por año
+
+Tope 70%
+
+Si cantidadEstaciones > 4 ⇒ RECARGO del 3% (se suma, no se descuenta)
+
+✔ CÓDIGO COMPLETO DE MAQUINAMUSCULACION
+public class MaquinaMusculacion extends Aparato implements Vendible {
+
+    private int cantidadEstaciones;
+
+    public MaquinaMusculacion(String codigoInterno, String nombre,
+                              int anioCompra, int horasUso,
+                              int cantidadEstaciones) {
+        super(codigoInterno, nombre, anioCompra, horasUso);
+        this.cantidadEstaciones = cantidadEstaciones;
+    }
+
+    public int getCantidadEstaciones() {
+        return cantidadEstaciones;
+    }
+
+    @Override
+    public String verTipoDeAparato() {
+        return "MUSCULACIÓN";
+    }
+
+    @Override
+    public double calcularPrecioVenta(double precioBase, int anioActual) {
+        int aniosDeUso = anioActual - this.anioCompra;
+        if (aniosDeUso < 0) aniosDeUso = 0;
+
+        double depreciacion = aniosDeUso * 0.08; // 8% por año
+        if (depreciacion > 0.70) depreciacion = 0.70; // tope del 70%
+
+        double precioDepreciado = precioBase * (1 - depreciacion);
+
+        // Recargo si tiene muchas estaciones
+        if (cantidadEstaciones > 4) {
+            precioDepreciado *= 1.03; // +3%
+        }
+
+        return precioDepreciado;
+    }
+}
+
+🟥 EJERCICIO 3 – Excepción EstacionesInsuficientesException
+
+La consigna decía:
+
+Si una máquina de musculación tiene menos de 2 estaciones,
+debe lanzarse una excepción verificada.
+
+Eso significa:
+
+Crear la clase de excepción (extends Exception)
+
+Agregársela al constructor de MaquinaMusculacion
+
+Lanzarla si cantidadEstaciones < 2
+
+Vamos parte por parte.
+
+✅ 1. Clase de excepción (completa y exacta)
+
+Copiá esto tal cual:
+
+public class EstacionesInsuficientesException extends Exception {
+
+    public EstacionesInsuficientesException() {
+        super("Error: una máquina de musculación debe tener al menos 2 estaciones.");
+    }
+
+    public EstacionesInsuficientesException(String mensaje) {
+        super(mensaje);
+    }
+}
+
+✅ 2. Agregar la excepción al constructor de MaquinaMusculacion
+
+Tenías esto antes:
+
+public MaquinaMusculacion(String codigoInterno, String nombre,
+                          int anioCompra, int horasUso,
+                          int cantidadEstaciones) {
+    super(codigoInterno, nombre, anioCompra, horasUso);
+    this.cantidadEstaciones = cantidadEstaciones;
+}
+
+
+Ahora debe quedar así:
+
+public MaquinaMusculacion(String codigoInterno, String nombre,
+                          int anioCompra, int horasUso,
+                          int cantidadEstaciones)
+                          throws EstacionesInsuficientesException {
+
+    super(codigoInterno, nombre, anioCompra, horasUso);
+
+    if (cantidadEstaciones < 2) {
+        throw new EstacionesInsuficientesException();
+    }
+
+    this.cantidadEstaciones = cantidadEstaciones;
+}
