@@ -299,3 +299,64 @@ public class Inventario {
         return false;
     }
 }
+
+✔ ACÁ TENÉS LA CLASE APARATO CORRECTA, COMPLETA Y 10/10
+
+Copiala así:
+
+abstract class Aparato {
+
+    protected String codigoInterno;
+    protected String nombre;
+    protected int anioCompra;
+    protected int horasUso;
+
+    public Aparato(String codigoInterno, String nombre, int anioCompra, int horasUso) {
+        this.codigoInterno = codigoInterno.toUpperCase();
+        this.nombre = nombre.toUpperCase();
+        this.anioCompra = anioCompra;
+        this.horasUso = horasUso;
+    }
+
+    // ==========================
+    // GETTERS
+    // ==========================
+    public String getCodigoInterno() {
+        return codigoInterno;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getAnioCompra() {
+        return anioCompra;
+    }
+
+    public int getHorasUso() {
+        return horasUso;
+    }
+
+    // ==========================
+    // MÉTODO ABSTRACTO
+    // ==========================
+    public abstract String verTipoDeAparato();
+
+    // ==========================
+    // EQUALS Y HASHCODE
+    // ==========================
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Aparato otro = (Aparato) obj;
+
+        return this.codigoInterno.equalsIgnoreCase(otro.codigoInterno);
+    }
+
+    @Override
+    public int hashCode() {
+        return codigoInterno.toUpperCase().hashCode();
+    }
+}
