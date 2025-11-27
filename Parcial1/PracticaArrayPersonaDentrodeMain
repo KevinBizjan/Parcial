@@ -1,0 +1,168 @@
+⭐ 1) Registrar objetos en un array
+
+(Esto te lo toma seguro)
+
+✔ Enunciado
+
+Crear un array de 5 administrativos.
+Pedir al usuario que cargue administrativos uno por uno hasta llenar el array.
+
+✔ Código (nivel exacto del parcial)
+Scanner sc = new Scanner(System.in);
+
+Administrativo[] admins = new Administrativo[5];
+int contador = 0;
+
+while (contador < admins.length) {
+
+    System.out.print("Nombre: ");
+    String nombre = sc.nextLine();
+
+    System.out.print("Apellido: ");
+    String apellido = sc.nextLine();
+
+    System.out.print("DNI: ");
+    int dni = sc.nextInt();
+    sc.nextLine();
+
+    System.out.print("Estado civil: ");
+    String estadoCivil = sc.nextLine();
+
+    System.out.print("Sector: ");
+    String sector = sc.nextLine();
+
+    admins[contador] = new Administrativo(nombre, apellido, dni, estadoCivil, sector);
+    contador++;
+
+    System.out.println("Administrativo cargado.\n");
+}
+
+
+👉 Esto es EXACTAMENTE nivel recuperatorio.
+
+⭐ 2) Mostrar elementos del array
+for (int i = 0; i < admins.length; i++) {
+    if (admins[i] != null) {
+        System.out.println(admins[i]);
+    }
+}
+
+
+👉 Sin foreach, porque todavía no lo dieron.
+
+⭐ 3) Buscar un elemento por DNI (muy típico)
+public static Administrativo buscarPorDni(Administrativo[] admins, int dni) {
+    for (int i = 0; i < admins.length; i++) {
+        if (admins[i] != null && admins[i].getDni() == dni) {
+            return admins[i];
+        }
+    }
+    return null;
+}
+
+
+👉 Si esto te sale, aprobás.
+
+⭐ 4) Eliminar un objeto del array (poner null)
+public static boolean eliminar(Administrativo[] admins, int dni) {
+    for (int i = 0; i < admins.length; i++) {
+        if (admins[i] != null && admins[i].getDni() == dni) {
+            admins[i] = null;
+            return true;
+        }
+    }
+    return false;
+}
+
+
+👉 Esto lo toman mucho en recuperatorios.
+
+⭐ 5) Menú sin métodos avanzados (nivel básico)
+int opcion;
+
+do {
+    System.out.println("1. Registrar administrativo");
+    System.out.println("2. Mostrar administrativos");
+    System.out.println("3. Buscar por DNI");
+    System.out.println("4. Eliminar administrativo");
+    System.out.println("5. Salir");
+    System.out.print("Opción: ");
+
+    opcion = sc.nextInt();
+    sc.nextLine();
+
+    switch(opcion) {
+
+        case 1:
+            if (contador < admins.length) {
+
+                System.out.print("Nombre: ");
+                String nombre = sc.nextLine();
+
+                System.out.print("Apellido: ");
+                String apellido = sc.nextLine();
+
+                System.out.print("DNI: ");
+                int dni = sc.nextInt();
+                sc.nextLine();
+
+                System.out.print("Estado civil: ");
+                String estadoCivil = sc.nextLine();
+
+                System.out.print("Sector: ");
+                String sector = sc.nextLine();
+
+                admins[contador] = new Administrativo(nombre, apellido, dni, estadoCivil, sector);
+                contador++;
+
+                System.out.println("Registrado.\n");
+            }
+            break;
+
+        case 2:
+            for (int i = 0; i < admins.length; i++) {
+                if (admins[i] != null) {
+                    System.out.println(admins[i]);
+                }
+            }
+            break;
+
+        case 3:
+            System.out.print("DNI a buscar: ");
+            int dniBuscar = sc.nextInt();
+            sc.nextLine();
+
+            Administrativo encontrado = buscarPorDni(admins, dniBuscar);
+
+            if (encontrado != null) {
+                System.out.println(encontrado);
+            } else {
+                System.out.println("No encontrado.");
+            }
+            break;
+
+        case 4:
+            System.out.print("DNI a eliminar: ");
+            int dniEliminar = sc.nextInt();
+            sc.nextLine();
+
+            boolean eliminado = eliminar(admins, dniEliminar);
+
+            if (eliminado) {
+                System.out.println("Eliminado.");
+            } else {
+                System.out.println("No existe ese DNI.");
+            }
+            break;
+
+        case 5:
+            System.out.println("Saliendo...");
+            break;
+
+        default:
+            System.out.println("Opción inválida.");
+    }
+
+} while(opcion != 5);
+
+sc.close();
