@@ -1,0 +1,82 @@
+📌 Vehiculo.java (abstracta)
+package vehiculos;
+
+public abstract class Vehiculo {
+    protected String marca;
+    protected int modelo;
+    protected String patente;
+
+    public Vehiculo(String marca, int modelo, String patente) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.patente = patente;
+    }
+
+    @Override
+    public String toString() {
+        return marca + " - " + patente + " (" + modelo + ")";
+    }
+}
+
+📌 Auto.java
+package vehiculos;
+
+public class Auto extends Vehiculo {
+    private int puertas;
+
+    public Auto(String marca, int modelo, String patente, int puertas) {
+        super(marca, modelo, patente);
+        this.puertas = puertas;
+    }
+
+    @Override
+    public String toString() {
+        return "Auto: " + super.toString() + " - Puertas: " + puertas;
+    }
+}
+
+📌 Moto.java
+package vehiculos;
+
+public class Moto extends Vehiculo {
+    private int cilindrada;
+
+    public Moto(String marca, int modelo, String patente, int cilindrada) {
+        super(marca, modelo, patente);
+        this.cilindrada = cilindrada;
+    }
+
+    @Override
+    public String toString() {
+        return "Moto: " + super.toString() + " - " + cilindrada + "cc";
+    }
+}
+
+📌 Inventario.java
+package vehiculos;
+
+public class Inventario {
+
+    public static void mostrar(Vehiculo[] lista) {
+        for (int i = 0; i < lista.length; i++) {
+            if (lista[i] != null) {
+                System.out.println(lista[i]);
+            }
+        }
+    }
+}
+
+📌 MainVehiculos.java
+package vehiculos;
+
+public class MainVehiculos {
+    public static void main(String[] args) {
+
+        Vehiculo[] lista = new Vehiculo[10];
+
+        lista[0] = new Auto("Ford", 2012, "ACB123", 5);
+        lista[1] = new Moto("Honda", 2020, "XYZ987", 150);
+
+        Inventario.mostrar(lista);
+    }
+}
