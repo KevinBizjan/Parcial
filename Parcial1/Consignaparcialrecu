@@ -1,0 +1,120 @@
+package Parciales.Parcial2025.Recuperatorio;
+
+import java.util.Scanner;
+
+/* ============================================================
+ *   1) CLASE PERSONA (PEDIDA EN EL PUNTO 1)
+ * ============================================================ */
+class Persona {
+
+    private String nombre;
+
+    public Persona(String nombre) {
+        this.nombre = nombre.toUpperCase(); 
+    }
+
+    public String mostrarInfo() {
+        return "Nombre: " + nombre;
+    }
+}
+
+/* ============================================================
+ *   CLASE ENCUESTA (DADA POR EL PROFESOR)
+ * ============================================================ */
+class Encuesta extends Persona {
+  private int puntaje;
+
+  public Encuesta(String nombre, int puntaje) {
+    super(nombre);
+    this.puntaje = puntaje;
+  }
+
+  @Override
+  public String mostrarInfo() {
+    return super.mostrarInfo() + " - Puntaje: " + puntaje;
+  }
+}
+
+/* ============================================================
+ *   ARCHIVO PRINCIPAL - ESTA ES LA ÚNICA QUE VA PUBLIC
+ * ============================================================ */
+public class Encuestadora {
+
+  public static Encuesta registrarEncuesta(Scanner sc) {
+
+    System.out.print("Ingrese el nombre del encuestado: ");
+    String nombre = sc.nextLine().toUpperCase();
+
+    int puntaje;
+
+    do {
+      System.out.print("Ingrese puntaje (1 a 5): ");
+      puntaje = sc.nextInt();
+      sc.nextLine();
+
+      if (puntaje < 1 || puntaje > 5) {
+        System.out.println("ERROR: El puntaje debe estar entre 1 y 5.");
+      }
+    } while (puntaje < 1 || puntaje > 5);
+
+    return new Encuesta(nombre, puntaje);
+  }
+
+  public static void mostrarResultados(Encuesta[] encuestas, int cantidad) {
+
+    System.out.println("\n===== RESULTADOS DE ENCUESTAS =====");
+
+    if (cantidad == 0) {
+      System.out.println("No hay encuestas registradas.");
+      return;
+    }
+
+    for (int i = 0; i < cantidad; i++) {
+      System.out.println(encuestas[i].mostrarInfo());
+    }
+  }
+
+  public static void main(String[] args) {
+
+    Scanner sc = new Scanner(System.in);
+
+    Encuesta[] encuestas = new Encuesta[20];
+    int cantidad = 0;
+    int opcion;
+
+    do {
+      System.out.println("\n===== SISTEMA DE ENCUESTAS =====");
+      System.out.println("1. Registrar encuesta");
+      System.out.println("2. Ver resultados");
+      System.out.println("3. Salir");
+      System.out.print("Elija una opción: ");
+      opcion = sc.nextInt();
+      sc.nextLine();
+
+      switch (opcion) {
+        case 1:
+          if (cantidad < 20) {
+            encuestas[cantidad] = registrarEncuesta(sc);
+            cantidad++;
+          } else {
+            System.out.println("Capacidad máxima alcanzada.");
+          }
+          break;
+
+        case 2:
+          mostrarResultados(encuestas, cantidad);
+          break;
+
+        case 3:
+          System.out.println("Saliendo...");
+          break;
+
+        default:
+          System.out.println("Opción inválida.");
+      }
+
+    } while (opcion != 3);
+
+    sc.close();
+  }
+}
