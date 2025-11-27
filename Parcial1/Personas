@@ -1,1 +1,239 @@
+📌 Persona.java
+package personas;
+
+public class Persona {
+    protected String nombre;
+    protected String apellido;
+    protected int dni;
+
+    public Persona(String nombre, String apellido, int dni) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+    }
+
+    public int getDni() {
+        return dni;
+    }
+
+    @Override
+    public String toString() {
+        return apellido + ", " + nombre + " (DNI: " + dni + ")";
+    }
+}
+
+📌 Materia.java
+package personas;
+
+public class Materia {
+    private String nombre;
+
+    public Materia(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return "- " + nombre;
+    }
+}
+
+📌 Estudiante.java
+package personas;
+
+public class Estudiante extends Persona {
+    private String carrera;
+
+    public Estudiante(String nombre, String apellido, int dni, String carrera) {
+        super(nombre, apellido, dni);
+        this.carrera = carrera;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " - Carrera: " + carrera;
+    }
+}
+
+📌 Interfaz Informe.java
+package personas;
+
+public interface Informe {
+    String generarInforme();
+}
+
+📌 Docente.java
+package personas;
+
+public class Docente extends Persona implements Informe {
+    private Materia[] materias;
+
+    public Docente(String nombre, String apellido, int dni, Materia[] materias) {
+        super(nombre, apellido, dni);
+        this.materias = materias;
+    }
+
+    @Override
+    public String generarInforme() {
+        return "Docente: " + super.toString() + " dicta:";
+    }
+
+    public void mostrarMaterias() {
+        for (int i = 0; i < materias.length; i++) {
+            if (materias[i] != null) {
+                System.out.println(materias[i]);
+            }
+        }
+    }
+}
+
+📌 UtilPersonas.java
+
+👉 Búsquedas, mostrar arrays, eliminar.
+
+package personas;
+
+public class UtilPersonas {
+
+    public static void mostrarPersonas(Persona[] lista) {
+        boolean hay = false;
+
+        for (int i = 0; i < lista.length; i++) {
+            if (lista[i] != null) {
+                System.out.println(lista[i]);
+                hay = true;
+            }
+        }
+
+        if (!hay) {
+            System.out.println("No hay registros.");
+        }
+    }
+
+    public static Persona buscarPorDni(Persona[] lista, int dni) {
+        for (int i = 0; i < lista.length; i++) {
+            if (lista[i] != null && lista[i].getDni() == dni) {
+                return lista[i];
+            }
+        }
+        return null;
+    }
+
+    public static boolean eliminar(Persona[] lista, int dni) {
+        for (int i = 0; i < lista.length; i++) {
+            if (lista[i] != null && lista[i].getDni() == dni) {
+                lista[i] = null;
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+📌 MainPersonas.java
+
+👉 El MENÚ COMPLETO con Scanner y arrays.
+
+package personas;
+
+import java.util.Scanner;
+
+public class MainPersonas {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        Persona[] lista = new Persona[20];
+        int contador = 0;
+
+        int op;
+
+        do {
+            System.out.println("\n=== MENU PERSONAS ===");
+            System.out.println("1. Registrar Estudiante");
+            System.out.println("2. Registrar Docente");
+            System.out.println("3. Mostrar todos");
+            System.out.println("4. Buscar por DNI");
+            System.out.println("5. Eliminar por DNI");
+            System.out.println("6. Salir");
+            System.out.print("Opción: ");
+            op = sc.nextInt();
+            sc.nextLine();
+
+            switch (op) {
+                case 1:
+                    System.out.print("Nombre: ");
+                    String n = sc.nextLine();
+
+                    System.out.print("Apellido: ");
+                    String a = sc.nextLine();
+
+                    System.out.print("DNI: ");
+                    int d = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Carrera: ");
+                    String c = sc.nextLine();
+
+                    lista[contador] = new Estudiante(n, a, d, c);
+                    contador++;
+                    break;
+
+                case 2:
+                    System.out.print("Nombre: ");
+                    String nd = sc.nextLine();
+
+                    System.out.print("Apellido: ");
+                    String ad = sc.nextLine();
+
+                    System.out.print("DNI: ");
+                    int dd = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Cuántas materias dicta: ");
+                    int cant = sc.nextInt();
+                    sc.nextLine();
+
+                    Materia[] mats = new Materia[cant];
+                    for (int i = 0; i < cant; i++) {
+                        System.out.print("Materia " + (i + 1) + ": ");
+                        mats[i] = new Materia(sc.nextLine());
+                    }
+
+                    lista[contador] = new Docente(nd, ad, dd, mats);
+                    contador++;
+                    break;
+
+                case 3:
+                    UtilPersonas.mostrarPersonas(lista);
+                    break;
+
+                case 4:
+                    System.out.print("DNI a buscar: ");
+                    int buscar = sc.nextInt();
+                    sc.nextLine();
+
+                    Persona p = UtilPersonas.buscarPorDni(lista, buscar);
+                    System.out.println(p != null ? p : "No encontrado");
+                    break;
+
+                case 5:
+                    System.out.print("DNI a eliminar: ");
+                    int elim = sc.nextInt();
+                    sc.nextLine();
+
+                    boolean ok = UtilPersonas.eliminar(lista, elim);
+                    System.out.println(ok ? "Eliminado" : "No existe el DNI");
+                    break;
+
+                case 6:
+                    System.out.println("Saliendo...");
+                    break;
+            }
+
+        } while (op != 6);
+
+        sc.close();
+    }
+}
 
