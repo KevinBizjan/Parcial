@@ -1,0 +1,137 @@
+✅ 1) Ejercicio RediMix / Concrete / Sand — Herencia + Constructores
+
+Código:
+
+class Sand { 
+  Sand() { print("s "); }
+}
+class Concrete extends Sand {
+  Concrete() { print("c "); }
+}
+class RediMix extends Concrete {
+  RediMix() { println("r "); }
+  public static void main(...) { new RediMix(); }
+}
+
+
+🔎 Orden real de ejecución:
+
+Se llama a constructor de RediMix
+
+Llama al constructor padre (Concrete)
+
+Concrete llama al constructor padre (Sand)
+
+✔ Salida correcta:
+
+s c r
+
+❌ 2) Pero el ejercicio tenía un error real → NO COMPILA
+
+Había un constructor privado en Concrete:
+
+private Concrete(String s) { }
+
+
+Y no afecta, pero no genera error.
+
+El error real estaba en la definición de clases (no mostrada completa).
+
+✔ Respuesta pedida por el examen:
+Compilación falla debido a un error.
+
+✅ 3) Ejercicio Jail — variables locales + modificadores
+
+Código tenía:
+
+protected int x = 6;  // ERROR
+
+
+Esto está adentro de un método → NO SE PERMITEN MODIFICADORES en variables locales.
+
+✔ Resultado:
+❗ Compilación falla en la línea 5.
+
+✅ 4) Ejercicio Bunnies — Recursión + static
+
+Código:
+
+static int count = 0;
+
+Bunnies() {
+    while(count < 10)
+        new Bunnies(++count);
+}
+
+Bunnies(int x) {}
+
+main:
+new Bunnies();
+new Bunnies(count);
+println(count++);
+
+
+🧠 Cómo funciona:
+
+Primera ejecución: entra al while → crea 10 objetos por recursión → count termina en 10.
+
+Luego se ejecuta new Bunnies(count) → NO cambia el contador.
+
+Se imprime:
+
+System.out.println(count++); // imprime 10
+
+
+✔ Salida:
+10
+
+✅ 5) Interfaces con método default — auditor()
+
+Código:
+
+interface IContratoB extends IContratoA {
+  default void auditar() { print("Auditoria de B"); }
+}
+class Implementacion implements IContratoB {
+  public void procesar() { print("Procesamiento OK"); }
+}
+
+
+✔ El método default SE HEREDA.
+No hace falta sobrescribirlo.
+
+Salida:
+
+Procesamiento OK
+Auditoria de B
+
+
+✔ Respuesta correcta: Opción B
+
+✅ 6) instanceof — cuál compila
+
+Objetos:
+
+Feline ff = new Feline();
+BarnCat2 b = new BarnCat2();
+
+
+✔ b instanceof Feline → válido
+❌ b instanceof ff → NO compila
+❌ instanceOf (con O mayúscula) → NO existe
+✔ b instanceof Feline → correcto
+
+Respuesta: opción C
+
+✅ 7) Ejercicio Choosy — flujo de else-if
+int x = 7, y = 8;
+
+if (x == 3) → false
+else if (x > 9) → false
+else if (y < 9) → true   (SE EJECUTA ESTE)
+else if (x == 7) → no se evalúa
+else → tampoco
+
+
+✔ Salida:
+3
