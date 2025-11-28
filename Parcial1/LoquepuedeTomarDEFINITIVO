@@ -1,162 +1,257 @@
-🎯 POSIBLE ESTRUCTURA DEL RECUPERATORIO
+package Parciales.Parcial2025.Recuperatorio;
 
-(Esto es EXACTAMENTE lo que el profe Uferer suele tomar)
+import java.util.Scanner;
 
-📌 CLASES BASE DADAS POR ÉL
-
-Él te da algo así:
-
+/* ============================================================
+ * 1) CLASE PERSONA (PUNTO 1)
+ * ============================================================ */
 class Persona {
-    protected String nombre;
-    protected String apellido;
 
-    public Persona(String nombre, String apellido) {
-        this.nombre = nombre;
-        this.apellido = apellido;
+    private String nombre;
+
+    public Persona(String nombre) {
+        this.nombre = nombre.toUpperCase();
     }
 
-    public String toString() {
-        return apellido + ", " + nombre;
+    public String mostrarInfo() {
+        return "Nombre: " + nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 }
 
-interface Informable {
-    String generarInforme();
-}
+/* ============================================================
+ * CLASE ENCUESTA - HERENCIA + OVERRIDE
+ * ============================================================ */
+class Encuesta extends Persona {
 
+    private int puntaje;
 
-Y después te pide:
-
-🧩 1 clase que hereda de Persona + implementa Informable + sobreescritura
-
-Ejemplo que puede tomar:
-
-class Empleado extends Persona implements Informable {
-    private String sector;
-
-    public Empleado(String nombre, String apellido, String sector) {
-        super(nombre, apellido);
-        this.sector = sector;
+    public Encuesta(String nombre, int puntaje) {
+        super(nombre);
+        this.puntaje = puntaje;
     }
 
-    @Override
-    public String generarInforme() {
-        return "Empleado: " + super.toString() + " - Sector: " + sector;
+    public int getPuntaje() {
+        return puntaje;
     }
 
     @Override
-    public String toString() {
-        return super.toString() + " - Sector: " + sector;
+    public String mostrarInfo() {
+        return super.mostrarInfo() + " - Puntaje: " + puntaje;
     }
 }
 
+/* ============================================================
+ * ENCUESTADORA - TODAS LAS FUNCIONES
+ * ============================================================ */
+public class Encuestadora {
 
-Esto cumple EXACTAMENTE lo que dijo:
+    /* ======= FUNCIÓN 1: Registrar encuesta ======= */
+    public static Encuesta registrarEncuesta(Scanner sc) {
 
-✔ herencia
-✔ sobreescritura (toString)
-✔ implementación de interfaz
-✔ método implementado
+        System.out.print("Ingrese el nombre del encuestado: ");
+        String nombre = sc.nextLine().toUpperCase();
 
-🔥 LAS 3 FUNCIONES QUE TE PUEDE TOMAR
+        int puntaje;
+        do {
+            System.out.print("Ingrese puntaje (1 a 5): ");
+            puntaje = sc.nextInt();
+            sc.nextLine();
 
-Te las detallo en modo EXAMEN.
+            if (puntaje < 1 || puntaje > 5) {
+                System.out.println("ERROR: puntaje inválido.");
+            }
+        } while (puntaje < 1 || puntaje > 5);
 
-📌 FUNCIÓN 1 (muy típica)
-➤ “Registrar un empleado/profesor/administrativo”
+        return new Encuesta(nombre, puntaje);
+    }
 
-Siempre pide lo mismo:
+    /* ======= FUNCIÓN 2: Mostrar resultados ======= */
+    public static void mostrarResultados(Encuesta[] encuestas, int cantidad) {
 
-public static Empleado registrarEmpleado(Scanner sc) {
-    System.out.print("Nombre: ");
-    String nombre = sc.nextLine();
+        System.out.println("\n===== RESULTADOS DE ENCUESTAS =====");
 
-    System.out.print("Apellido: ");
-    String apellido = sc.nextLine();
+        if (cantidad == 0) {
+            System.out.println("No hay encuestas registradas.");
+            return;
+        }
 
-    System.out.print("Sector: ");
-    String sector = sc.nextLine();
-
-    return new Empleado(nombre, apellido, sector);
-}
-
-
-✔ pide datos
-✔ crea el objeto
-✔ lo devuelve
-✔ debe usar new
-
-📌 FUNCIÓN 2
-➤ “Mostrar los elementos de un arreglo ignorando las posiciones vacías”
-
-Esto SIEMPRE lo toma:
-
-public static void mostrarEmpleados(Empleado[] lista) {
-    for (int i = 0; i < lista.length; i++) {
-        if (lista[i] != null) {
-            System.out.println(lista[i].toString());
+        for (int i = 0; i < cantidad; i++) {
+            System.out.println(encuestas[i].mostrarInfo());
         }
     }
-}
 
+    /* ======= FUNCIÓN 3: Contar por puntaje ======= */
+    public static int contarPorPuntaje(Encuesta[] arr, int cantidad, int x) {
 
-✔ for clásico
-✔ null-check
-✔ toString
+        int cont = 0;
 
-📌 FUNCIÓN 3
-➤ “Mostrar un informe si el objeto implementa Informable”
+        for (int i = 0; i < cantidad; i++) {
+            if (arr[i].getPuntaje() == x) {
+                cont++;
+            }
+        }
+        return cont;
+    }
 
-Y como NO quiere instanceof, lo toma ASÍ:
+    /* ======= FUNCIÓN 4: Promedio general ======= */
+    public static double promedioPuntaje(Encuesta[] arr, int cantidad) {
 
-public static void mostrarInforme(Informable obj) {
-    System.out.println(obj.generarInforme());
-}
+        if (cantidad == 0) return 0;
 
+        int suma = 0;
 
-Si el objeto tiene materias, sector, etc., eso se agrega en la clase misma.
+        for (int i = 0; i < cantidad; i++) {
+            suma += arr[i].getPuntaje();
+        }
 
-🧨 OPCIONAL: FUNCIÓN ADICIONAL QUE A VECES TOMA
-➤ Buscar por nombre/DNI en el array
-public static Empleado buscarEmpleado(Empleado[] lista, String nombre) {
-    for (int i = 0; i < lista.length; i++) {
-        if (lista[i] != null && lista[i].nombre.equals(nombre)) {
-            return lista[i];
+        return (double) suma / cantidad;
+    }
+
+    /* ======= FUNCIÓN 5: Buscar por nombre ======= */
+    public static Encuesta buscarPorNombre(Encuesta[] arr, int cantidad, String nombre) {
+
+        nombre = nombre.toUpperCase();
+
+        for (int i = 0; i < cantidad; i++) {
+            if (arr[i].getNombre().equals(nombre)) {
+                return arr[i];
+            }
+        }
+
+        return null;
+    }
+
+    /* ======= FUNCIÓN 6: Mostrar puntajes mayores a X ======= */
+    public static void mostrarMayoresA(Encuesta[] arr, int cantidad, int x) {
+
+        for (int i = 0; i < cantidad; i++) {
+            if (arr[i].getPuntaje() > x) {
+                System.out.println(arr[i].mostrarInfo());
+            }
         }
     }
-    return null;
-}
 
+    /* ======= FUNCIÓN 7: Encuesta con mejor puntaje ======= */
+    public static Encuesta mejorPuntaje(Encuesta[] arr, int cantidad) {
 
-Aunque este año no lo pidió, podría pedirlo.
+        if (cantidad == 0) return null;
 
-🔥 MENÚ (si te lo pide como cuarta consigna)
-public static void menu() {
-    Scanner sc = new Scanner(System.in);
-    Empleado[] empleados = new Empleado[10];
-    int contador = 0;
+        Encuesta mejor = arr[0];
 
-    int opcion;
-    do {
-        System.out.println("1. Registrar empleado");
-        System.out.println("2. Mostrar empleados");
-        System.out.println("3. Mostrar informe");
-        System.out.println("4. Salir");
-
-        opcion = sc.nextInt();
-        sc.nextLine();
-
-        switch (opcion) {
-            case 1:
-                empleados[contador] = registrarEmpleado(sc);
-                contador++;
-                break;
-            case 2:
-                mostrarEmpleados(empleados);
-                break;
-            case 3:
-                mostrarInforme(empleados[0]);
-                break;
+        for (int i = 1; i < cantidad; i++) {
+            if (arr[i].getPuntaje() > mejor.getPuntaje()) {
+                mejor = arr[i];
+            }
         }
-    } while (opcion != 4);
+        return mejor;
+    }
+
+    /* ======= FUNCIÓN 8: Encuesta con peor puntaje ======= */
+    public static Encuesta peorPuntaje(Encuesta[] arr, int cantidad) {
+
+        if (cantidad == 0) return null;
+
+        Encuesta peor = arr[0];
+
+        for (int i = 1; i < cantidad; i++) {
+            if (arr[i].getPuntaje() < peor.getPuntaje()) {
+                peor = arr[i];
+            }
+        }
+        return peor;
+    }
+
+    /* ============================================================
+     * MENÚ PRINCIPAL COMPLETO
+     * ============================================================ */
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        Encuesta[] encuestas = new Encuesta[20];
+        int cantidad = 0;
+        int opcion;
+
+        do {
+            System.out.println("\n===== SISTEMA DE ENCUESTAS =====");
+            System.out.println("1. Registrar encuesta");
+            System.out.println("2. Ver resultados");
+            System.out.println("3. Contar puntajes X");
+            System.out.println("4. Promedio");
+            System.out.println("5. Buscar por nombre");
+            System.out.println("6. Mostrar mayores a X");
+            System.out.println("7. Mejor puntaje");
+            System.out.println("8. Peor puntaje");
+            System.out.println("9. Salir");
+            System.out.print("Opción: ");
+            opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+
+                case 1:
+                    if (cantidad < 20) {
+                        encuestas[cantidad] = registrarEncuesta(sc);
+                        cantidad++;
+                    } else {
+                        System.out.println("Capacidad máxima alcanzada.");
+                    }
+                    break;
+
+                case 2:
+                    mostrarResultados(encuestas, cantidad);
+                    break;
+
+                case 3:
+                    System.out.print("Puntaje a contar: ");
+                    int x = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("Cantidad: " + contarPorPuntaje(encuestas, cantidad, x));
+                    break;
+
+                case 4:
+                    System.out.println("Promedio: " + promedioPuntaje(encuestas, cantidad));
+                    break;
+
+                case 5:
+                    System.out.print("Nombre a buscar: ");
+                    String nombreBuscado = sc.nextLine();
+                    Encuesta e = buscarPorNombre(encuestas, cantidad, nombreBuscado);
+                    if (e != null) System.out.println(e.mostrarInfo());
+                    else System.out.println("No encontrado.");
+                    break;
+
+                case 6:
+                    System.out.print("Mostrar mayores a: ");
+                    int limite = sc.nextInt();
+                    sc.nextLine();
+                    mostrarMayoresA(encuestas, cantidad, limite);
+                    break;
+
+                case 7:
+                    Encuesta m = mejorPuntaje(encuestas, cantidad);
+                    if (m != null) System.out.println("Mejor puntaje: " + m.mostrarInfo());
+                    break;
+
+                case 8:
+                    Encuesta p = peorPuntaje(encuestas, cantidad);
+                    if (p != null) System.out.println("Peor puntaje: " + p.mostrarInfo());
+                    break;
+
+                case 9:
+                    System.out.println("Saliendo...");
+                    break;
+
+                default:
+                    System.out.println("Opción inválida.");
+            }
+
+        } while (opcion != 9);
+
+        sc.close();
+    }
 }
